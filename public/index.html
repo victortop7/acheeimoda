@@ -10,7 +10,7 @@
   <meta property="og:type" content="website">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600&family=Fraunces:opsz,wght@9..144,500;9..144,600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700;900&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="/style.css">
   <script src="/config.js"></script>
   <script>
@@ -41,52 +41,64 @@
   <main>
     <section class="hero-centro">
       <div class="wrap-estreito">
-        <span class="selo">Especial Black Friday e Natal</span>
-        <h1>Achados de moda feminina com desconto de verdade</h1>
-        <p class="sub">Entre no grupo gratuito e receba, assim que aparecem, ofertas de roupas e acessórios escolhidas por nota e avaliações de quem já comprou.</p>
+        <h1>
+          <span>Black Friday 2026:</span>
+          <span class="h1-b">receba ofertas de</span>
+          <span class="h1-verde">moda feminina</span>
+          <span>direto no seu WhatsApp!</span>
+        </h1>
 
         <!-- Espaço do vídeo (vertical). Defina videoUrl em config.js -->
         <div class="video-slot" id="video-slot" aria-label="Vídeo de apresentação"></div>
 
         <a class="btn btn-grande" id="entrar" href="/obrigado">Entrar no grupo agora</a>
-        <p class="vagas" id="vagas" hidden></p>
-        <p class="nota-btn">Grupo silencioso: só os admins enviam mensagens. Você sai quando quiser.</p>
-        <p class="contador" id="contador" hidden></p>
+        <p class="aviso"><strong>Aviso:</strong> <span id="aviso-texto">Grupo gratuito. Só os administradores enviam mensagens e você sai quando quiser.</span></p>
       </div>
     </section>
 
-    <section class="exemplo">
+    <section class="prova">
       <div class="wrap">
-        <h2>Veja como as ofertas chegam</h2>
-        <div class="exemplo-grid">
-          <ul class="lista">
-            <li>
-              <svg width="20" height="20" viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="M4 10.5l4 4 8-9" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-              <span>Preço original e preço atual sempre à mostra, para você ver o desconto real</span>
-            </li>
-            <li>
-              <svg width="20" height="20" viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="M4 10.5l4 4 8-9" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-              <span>Só entram produtos com boa nota e muitas avaliações</span>
-            </li>
-            <li>
-              <svg width="20" height="20" viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="M4 10.5l4 4 8-9" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-              <span>Vestidos, conjuntos, bolsas e bijuterias, com opções para presentear</span>
-            </li>
-          </ul>
+        <div class="prova-bloco" id="contador-bloco" hidden>
+          <p class="contador-grande" id="contador-texto"></p>
+        </div>
 
-          <div>
-            <p class="exemplo-rotulo">Exemplo de oferta</p>
-            <div class="oferta" aria-label="Exemplo de oferta">
-              <div class="oferta-img">
-                Foto do produto
-                <div class="oferta-nota">4.8 de 5 &middot; 2,1 mil avaliações</div>
-              </div>
-              <div class="oferta-corpo">
-                <p class="oferta-gancho">O vestido que resolve a ceia de Natal</p>
-                <p>Vestido midi canelado, do P ao GG</p>
-                <p><span class="de">De R$ 89,90</span> &nbsp;|&nbsp; <span class="por">Por R$ 49,90</span></p>
-                <p class="link-falso">link do produto</p>
-                <p class="tag">#Publi &middot; link de afiliado</p>
+        <div class="prova-bloco" id="depoimentos-bloco" hidden>
+          <h2>O que dizem quem já entrou</h2>
+          <div class="depoimentos" id="depoimentos"></div>
+        </div>
+
+        <div class="prova-bloco">
+          <h2>Veja como as ofertas chegam</h2>
+          <div class="exemplo-grid">
+            <ul class="lista">
+              <li>
+                <svg width="20" height="20" viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="M4 10.5l4 4 8-9" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                <span>Preço original e preço atual sempre à mostra, para você ver o desconto real</span>
+              </li>
+              <li>
+                <svg width="20" height="20" viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="M4 10.5l4 4 8-9" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                <span>Só entram produtos com boa nota e muitas avaliações</span>
+              </li>
+              <li>
+                <svg width="20" height="20" viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="M4 10.5l4 4 8-9" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                <span>Vestidos, conjuntos, bolsas e bijuterias, com opções para presentear</span>
+              </li>
+            </ul>
+
+            <div>
+              <p class="exemplo-rotulo">Exemplo de oferta</p>
+              <div class="oferta" aria-label="Exemplo de oferta">
+                <div class="oferta-img">
+                  Foto do produto
+                  <div class="oferta-nota">4.8 de 5 &middot; 2,1 mil avaliações</div>
+                </div>
+                <div class="oferta-corpo">
+                  <p class="oferta-gancho">O vestido que resolve a ceia de Natal</p>
+                  <p>Vestido midi canelado, do P ao GG</p>
+                  <p><span class="de">De R$ 89,90</span> &nbsp;|&nbsp; <span class="por">Por R$ 49,90</span></p>
+                  <p class="link-falso">link do produto</p>
+                  <p class="tag">#Publi &middot; link de afiliado</p>
+                </div>
               </div>
             </div>
           </div>
@@ -155,13 +167,17 @@
     </section>
   </main>
 
+  <div class="aviso-legal">
+    <p>AVISO LEGAL: Alguns links divulgados são de afiliado e podemos receber uma comissão por compras feitas por eles, sem custo extra para você. Preços, estoque e descontos podem mudar a qualquer momento na loja, então confira sempre o valor final antes de comprar. Não garantimos economia em cada compra. Somos um grupo independente e não temos vínculo com as lojas divulgadas.</p>
+  </div>
+
   <footer class="rodape">
     <div class="wrap">
-      <p>Alguns links são de afiliado: podemos receber uma comissão por compras feitas por eles, sem custo extra para você.</p>
-      <p>Preços, estoque e descontos podem mudar a qualquer momento na loja. Confira sempre o valor final antes de comprar.</p>
-      <p>Somos um grupo independente e não temos vínculo com as lojas divulgadas.</p>
-      <p class="links-legais"><a href="/termos">Termos de Uso</a> &middot; <a href="/privacidade">Política de Privacidade</a></p>
-      <p id="contato" hidden></p>
+      <div class="rodape-3">
+        <a href="/termos">Termos de Uso</a>
+        <div class="ident" id="ident"></div>
+        <a href="/privacidade">Política de Privacidade</a>
+      </div>
     </div>
   </footer>
 
@@ -178,11 +194,22 @@
         a.textContent = '@' + site.instagram;
         a.hidden = false;
       }
-      if (site.contactEmail) {
-        var c = document.getElementById('contato');
-        c.textContent = 'Contato: ' + site.contactEmail;
-        c.hidden = false;
-      }
+
+      // Identificação no rodapé (pessoa física, sem CNPJ): marca, responsável e contato, só o que estiver preenchido
+      (function ident() {
+        var box = document.getElementById('ident');
+        var nome = document.createElement('strong');
+        nome.textContent = site.brand || 'Achei Moda';
+        box.appendChild(nome);
+        if (site.ownerName) {
+          box.appendChild(document.createElement('br'));
+          box.appendChild(document.createTextNode('Responsável: ' + site.ownerName));
+        }
+        if (site.contactEmail) {
+          box.appendChild(document.createElement('br'));
+          box.appendChild(document.createTextNode(site.contactEmail));
+        }
+      })();
 
       // Repassa utm_* e fbclid para as próximas páginas
       var qs = window.location.search;
@@ -225,6 +252,21 @@
         slot.hidden = true;
       })();
 
+      // Depoimentos reais (só aparecem se houver imagens em config.js)
+      (function depoimentos() {
+        var lista = site.testimonialImages || [];
+        if (!lista.length) return;
+        var box = document.getElementById('depoimentos');
+        lista.forEach(function (src) {
+          var img = document.createElement('img');
+          img.src = src;
+          img.alt = 'Depoimento de participante do grupo';
+          img.loading = 'lazy';
+          box.appendChild(img);
+        });
+        document.getElementById('depoimentos-bloco').hidden = false;
+      })();
+
       // Faixa de urgência com prazo REAL (horário de Brasília, UTC-3)
       (function faixa() {
         var prazos = [
@@ -254,16 +296,15 @@
         if (!d) return;
         var limiteVagas = site.showSlotsBelow || 150;
         if (typeof d.vagas === 'number' && d.vagas > 0 && d.vagas <= limiteVagas) {
-          var v = document.getElementById('vagas');
-          v.textContent = 'Restam ' + d.vagas + (d.vagas === 1 ? ' vaga' : ' vagas') + ' neste grupo. Quando ele lotar, abrimos outro.';
-          v.hidden = false;
+          document.getElementById('aviso-texto').textContent =
+            'Restam ' + d.vagas + (d.vagas === 1 ? ' vaga' : ' vagas') + ' neste grupo. Quando ele lotar, abrimos outro.';
         }
         var min = site.showCounterFrom || 500;
         if (typeof d.membros === 'number' && d.membros >= min) {
           var arred = Math.floor(d.membros / 100) * 100;
-          var el = document.getElementById('contador');
-          el.textContent = 'Mais de ' + arred.toLocaleString('pt-BR') + ' pessoas já participam dos nossos grupos.';
-          el.hidden = false;
+          document.getElementById('contador-texto').textContent =
+            'Já são mais de ' + arred.toLocaleString('pt-BR') + ' pessoas nos nossos grupos';
+          document.getElementById('contador-bloco').hidden = false;
         }
       }).catch(function () {});
     })();
