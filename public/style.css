@@ -202,6 +202,66 @@ h2 {
 .passo h3 { font-size: 18px; margin: 0 0 6px; }
 .passo p { margin: 0; color: var(--muted); font-size: 16px; }
 
+/* Faixa de urgência */
+.faixa {
+  background: var(--accent);
+  color: #fff;
+  text-align: center;
+  padding: 11px 16px;
+  font-size: 14.5px;
+  font-weight: 500;
+  line-height: 1.4;
+  font-variant-numeric: tabular-nums;
+}
+
+/* Hero centralizado (formato: título, vídeo, botão) */
+.hero-centro { padding: 36px 0 52px; text-align: center; }
+.wrap-estreito { width: 100%; max-width: 640px; margin: 0 auto; padding: 0 20px; }
+.hero-centro .sub { margin-left: auto; margin-right: auto; }
+
+.video-slot {
+  width: min(320px, 100%);
+  aspect-ratio: 9 / 16;
+  margin: 0 auto 26px;
+  border-radius: 10px;
+  overflow: hidden;
+  background: #efe7de;
+  border: 1px solid var(--line);
+}
+.video-slot iframe,
+.video-slot video { width: 100%; height: 100%; border: 0; display: block; background: #000; }
+.video-vazio {
+  width: 100%;
+  height: 100%;
+  display: grid;
+  place-items: center;
+  padding: 20px;
+  color: var(--muted);
+  font-size: 15px;
+}
+
+.btn-grande {
+  display: block;
+  width: 100%;
+  max-width: 420px;
+  margin: 0 auto;
+  padding: 19px 28px;
+  font-size: 19px;
+}
+.vagas {
+  margin: 14px 0 0;
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--accent);
+}
+.hero-centro .nota-btn { margin-top: 10px; }
+
+/* Exemplo de oferta */
+.exemplo { padding: 8px 0 52px; border-top: 1px solid var(--line); background: var(--bg); }
+.exemplo h2 { padding-top: 44px; }
+.exemplo-grid { display: grid; gap: 32px; }
+.exemplo .lista { margin-top: 0; }
+
 /* Contador e FAQ */
 .contador {
   margin: 10px 0 0;
@@ -273,7 +333,10 @@ h2 {
 @media (min-width: 820px) {
   .hero { padding: 72px 0 84px; }
   .hero .wrap { grid-template-columns: 1.15fr 0.85fr; gap: 64px; align-items: center; }
+  .hero-centro { padding: 56px 0 72px; }
+  .exemplo-grid { grid-template-columns: 1fr 380px; gap: 64px; align-items: center; }
   .btn { width: auto; min-width: 280px; }
+  .btn-grande { width: 100%; min-width: 0; }
   .grid3 { grid-template-columns: repeat(3, 1fr); gap: 40px; }
   .oferta { margin-left: auto; }
 }

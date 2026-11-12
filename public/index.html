@@ -3,8 +3,11 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Grupo de ofertas de moda feminina</title>
+  <title>Achei Moda | Grupo de ofertas de moda feminina</title>
   <meta name="description" content="Grupo gratuito no WhatsApp com ofertas selecionadas de roupas e acessórios femininos. Só os admins enviam mensagens.">
+  <meta property="og:title" content="Achei Moda | Grupo de ofertas de moda feminina">
+  <meta property="og:description" content="Ofertas de roupas e acessórios escolhidas por nota e avaliações. Grupo gratuito, só admins enviam mensagens.">
+  <meta property="og:type" content="website">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600&family=Fraunces:opsz,wght@9..144,500;9..144,600&display=swap" rel="stylesheet">
@@ -23,25 +26,39 @@
 </head>
 <body>
 
+  <!-- Faixa de urgência com prazo real: contagem até a Black Friday (27/11/2026) e depois até o Natal -->
+  <div class="faixa" id="faixa" hidden>
+    <span id="faixa-texto"></span>
+  </div>
+
   <header class="topo">
     <div class="wrap">
-      <a class="marca" href="/" data-brand>Sua Marca</a>
+      <a class="marca" href="/" data-brand>Achei Moda</a>
       <a class="insta" href="#" data-insta hidden>Instagram</a>
     </div>
   </header>
 
   <main>
-    <section class="hero">
+    <section class="hero-centro">
+      <div class="wrap-estreito">
+        <span class="selo">Especial Black Friday e Natal</span>
+        <h1>Achados de moda feminina com desconto de verdade</h1>
+        <p class="sub">Entre no grupo gratuito e receba, assim que aparecem, ofertas de roupas e acessórios escolhidas por nota e avaliações de quem já comprou.</p>
+
+        <!-- Espaço do vídeo (vertical). Defina videoUrl em config.js -->
+        <div class="video-slot" id="video-slot" aria-label="Vídeo de apresentação"></div>
+
+        <a class="btn btn-grande" id="entrar" href="/obrigado">Entrar no grupo agora</a>
+        <p class="vagas" id="vagas" hidden></p>
+        <p class="nota-btn">Grupo silencioso: só os admins enviam mensagens. Você sai quando quiser.</p>
+        <p class="contador" id="contador" hidden></p>
+      </div>
+    </section>
+
+    <section class="exemplo">
       <div class="wrap">
-        <div>
-          <span class="selo">Especial Black Friday e Natal</span>
-          <h1>Achados de moda feminina com desconto de verdade</h1>
-          <p class="sub">Entre no grupo gratuito e receba todos os dias ofertas de roupas e acessórios escolhidas por nota e avaliações de quem já comprou.</p>
-
-          <a class="btn" id="entrar" href="/obrigado">Entrar no grupo</a>
-          <p class="nota-btn">Grupo silencioso: só os admins enviam mensagens. Você sai quando quiser.</p>
-          <p class="contador" id="contador" hidden></p>
-
+        <h2>Veja como as ofertas chegam</h2>
+        <div class="exemplo-grid">
           <ul class="lista">
             <li>
               <svg width="20" height="20" viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="M4 10.5l4 4 8-9" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
@@ -56,21 +73,21 @@
               <span>Vestidos, conjuntos, bolsas e bijuterias, com opções para presentear</span>
             </li>
           </ul>
-        </div>
 
-        <div>
-          <p class="exemplo-rotulo">Exemplo de como as ofertas chegam no grupo</p>
-          <div class="oferta" aria-label="Exemplo de oferta">
-            <div class="oferta-img">
-              Foto do produto
-              <div class="oferta-nota">4.8 de 5 &middot; 2,1 mil avaliações</div>
-            </div>
-            <div class="oferta-corpo">
-              <p class="oferta-gancho">O vestido que resolve a ceia de Natal</p>
-              <p>Vestido midi canelado, do P ao GG</p>
-              <p><span class="de">De R$ 89,90</span> &nbsp;|&nbsp; <span class="por">Por R$ 49,90</span></p>
-              <p class="link-falso">link do produto</p>
-              <p class="tag">#Publi &middot; link de afiliado</p>
+          <div>
+            <p class="exemplo-rotulo">Exemplo de oferta</p>
+            <div class="oferta" aria-label="Exemplo de oferta">
+              <div class="oferta-img">
+                Foto do produto
+                <div class="oferta-nota">4.8 de 5 &middot; 2,1 mil avaliações</div>
+              </div>
+              <div class="oferta-corpo">
+                <p class="oferta-gancho">O vestido que resolve a ceia de Natal</p>
+                <p>Vestido midi canelado, do P ao GG</p>
+                <p><span class="de">De R$ 89,90</span> &nbsp;|&nbsp; <span class="por">Por R$ 49,90</span></p>
+                <p class="link-falso">link do produto</p>
+                <p class="tag">#Publi &middot; link de afiliado</p>
+              </div>
             </div>
           </div>
         </div>
@@ -133,7 +150,7 @@
     <section class="fecho">
       <div class="wrap">
         <h2>Pronta para achar o próximo look?</h2>
-        <a class="btn" href="/obrigado" id="entrar-2">Entrar no grupo</a>
+        <a class="btn btn-grande" href="/obrigado" id="entrar-2">Entrar no grupo agora</a>
       </div>
     </section>
   </main>
@@ -151,34 +168,99 @@
   <script>
     (function () {
       var site = window.SITE || {};
-      document.querySelectorAll('[data-brand]').forEach(function (el) { el.textContent = site.brand || 'Sua Marca'; });
-      document.title = (site.brand ? site.brand + ' | ' : '') + 'Grupo de ofertas de moda feminina';
 
+      // Marca, título e Instagram
+      document.querySelectorAll('[data-brand]').forEach(function (el) { el.textContent = site.brand || 'Achei Moda'; });
+      document.title = (site.brand || 'Achei Moda') + ' | Grupo de ofertas de moda feminina';
       if (site.instagram) {
         var a = document.querySelector('[data-insta]');
         a.href = 'https://instagram.com/' + site.instagram;
         a.textContent = '@' + site.instagram;
         a.hidden = false;
       }
-
-      // Repassa utm_* e fbclid para as próximas páginas
-      var qs = window.location.search;
-      if (qs) {
-        document.querySelectorAll('#entrar, #entrar-2').forEach(function (a) { a.href = '/obrigado' + qs; });
-      }
-
       if (site.contactEmail) {
         var c = document.getElementById('contato');
         c.textContent = 'Contato: ' + site.contactEmail;
         c.hidden = false;
       }
 
-      // Contador honesto: só aparece quando o total real passa do mínimo definido em config.js
+      // Repassa utm_* e fbclid para as próximas páginas
+      var qs = window.location.search;
+      if (qs) {
+        document.querySelectorAll('#entrar, #entrar-2').forEach(function (el) { el.href = '/obrigado' + qs; });
+      }
+
+      // Vídeo: YouTube (watch, shorts, youtu.be), arquivo .mp4 ou espaço reservado
+      (function montarVideo() {
+        var slot = document.getElementById('video-slot');
+        var url = (site.videoUrl || '').trim();
+        var el;
+        if (!url) {
+          el = document.createElement('div');
+          el.className = 'video-vazio';
+          el.textContent = 'Vídeo de apresentação em breve';
+          slot.appendChild(el);
+          return;
+        }
+        if (/\.mp4(\?.*)?$/i.test(url)) {
+          el = document.createElement('video');
+          el.src = url;
+          el.controls = true;
+          el.playsInline = true;
+          el.preload = 'metadata';
+          slot.appendChild(el);
+          return;
+        }
+        var m = url.match(/(?:youtu\.be\/|youtube\.com\/(?:watch\?v=|shorts\/|embed\/))([A-Za-z0-9_-]{11})/);
+        if (m) {
+          el = document.createElement('iframe');
+          el.src = 'https://www.youtube-nocookie.com/embed/' + m[1] + '?rel=0&playsinline=1';
+          el.title = 'Vídeo de apresentação';
+          el.loading = 'lazy';
+          el.allow = 'accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture';
+          el.allowFullscreen = true;
+          slot.appendChild(el);
+          return;
+        }
+        slot.hidden = true;
+      })();
+
+      // Faixa de urgência com prazo REAL (horário de Brasília, UTC-3)
+      (function faixa() {
+        var prazos = [
+          { ate: Date.UTC(2026, 10, 27, 3, 0, 0), texto: 'Black Friday em ' },
+          { ate: Date.UTC(2026, 11, 25, 3, 0, 0), texto: 'Natal em ' }
+        ];
+        var barra = document.getElementById('faixa');
+        var txt = document.getElementById('faixa-texto');
+        function tick() {
+          var agora = Date.now();
+          var alvo = null;
+          for (var i = 0; i < prazos.length; i++) { if (prazos[i].ate > agora) { alvo = prazos[i]; break; } }
+          if (!alvo) { barra.hidden = true; return; }
+          var s = Math.floor((alvo.ate - agora) / 1000);
+          var d = Math.floor(s / 86400);
+          var h = Math.floor((s % 86400) / 3600);
+          var mi = Math.floor((s % 3600) / 60);
+          txt.textContent = alvo.texto + d + 'd ' + String(h).padStart(2, '0') + 'h ' + String(mi).padStart(2, '0') + 'min. As ofertas saem no grupo assim que aparecem.';
+          barra.hidden = false;
+        }
+        tick();
+        setInterval(tick, 30000);
+      })();
+
+      // Números reais do banco: vagas do grupo atual e total de membros
       fetch('/api/stats').then(function (r) { return r.json(); }).then(function (d) {
+        if (!d) return;
+        var limiteVagas = site.showSlotsBelow || 150;
+        if (typeof d.vagas === 'number' && d.vagas > 0 && d.vagas <= limiteVagas) {
+          var v = document.getElementById('vagas');
+          v.textContent = 'Restam ' + d.vagas + (d.vagas === 1 ? ' vaga' : ' vagas') + ' neste grupo. Quando ele lotar, abrimos outro.';
+          v.hidden = false;
+        }
         var min = site.showCounterFrom || 500;
-        var n = d && d.membros;
-        if (typeof n === 'number' && n >= min) {
-          var arred = Math.floor(n / 100) * 100;
+        if (typeof d.membros === 'number' && d.membros >= min) {
+          var arred = Math.floor(d.membros / 100) * 100;
           var el = document.getElementById('contador');
           el.textContent = 'Mais de ' + arred.toLocaleString('pt-BR') + ' pessoas já participam dos nossos grupos.';
           el.hidden = false;
