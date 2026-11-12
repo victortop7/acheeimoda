@@ -1,0 +1,73 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Política de Privacidade</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;9..40,600&family=Fraunces:opsz,wght@9..144,600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/style.css">
+  <script src="/config.js"></script>
+</head>
+<body>
+  <main class="legal">
+    <a class="voltar" href="/">Voltar</a>
+    <h1>Política de Privacidade</h1>
+    <p class="atualizado">Última atualização: <span data-fill="lastUpdate"></span></p>
+
+    <p>Esta política explica quais dados são tratados quando você usa o site e os grupos de <strong data-fill="brand"></strong>, de acordo com a Lei Geral de Proteção de Dados (LGPD, Lei 13.709/2018).</p>
+
+    <h2>1. Quem é o responsável</h2>
+    <p>O responsável pelo tratamento é <span data-fill="ownerName"></span>, pessoa física. Contato para assuntos de privacidade: <span data-fill="contactEmail"></span>.</p>
+
+    <h2>2. Quais dados tratamos</h2>
+    <ul>
+      <li><strong>Cliques no botão de entrada:</strong> registramos de forma simples que houve um clique, o grupo para o qual a pessoa foi encaminhada, a data e a hora, e a origem da visita (por exemplo, Instagram), quando o endereço traz esses parâmetros. Não pedimos nome, telefone ou e-mail no site.</li>
+      <li><strong>Medição de anúncios:</strong> se usarmos o Pixel do Meta, o Meta pode coletar dados do seu navegador (como identificadores, endereço IP e cookies) para medir resultados de anúncios. Isso segue a política do próprio Meta.</li>
+      <li><strong>Fontes do Google:</strong> o site carrega fontes de tipografia do Google, o que pode expor seu endereço IP a esse serviço.</li>
+      <li><strong>Infraestrutura:</strong> o site é hospedado na Cloudflare, que pode registrar dados técnicos de acesso para segurança e funcionamento.</li>
+    </ul>
+
+    <h2>3. Dados no WhatsApp</h2>
+    <p>Os grupos funcionam no WhatsApp, que tem regras e política próprias. Ao entrar em um grupo, seu número de telefone pode ficar visível para os administradores e, conforme as configurações do WhatsApp, para outros participantes. Nós não coletamos seu número pelo site, e usamos o grupo apenas para enviar ofertas.</p>
+
+    <h2>4. Para que usamos</h2>
+    <ul>
+      <li>Encaminhar você ao grupo com vaga.</li>
+      <li>Entender quais divulgações trazem pessoas ao grupo e melhorar nossos anúncios.</li>
+      <li>Manter o site seguro e funcionando.</li>
+    </ul>
+    <p>A base legal é o nosso interesse legítimo em operar e divulgar o grupo, e o seu consentimento quando houver cookies de medição.</p>
+
+    <h2>5. Compartilhamento</h2>
+    <p>Não vendemos seus dados. Eles podem ser tratados pelos prestadores citados acima (Cloudflare, Meta e Google) para o funcionamento do site e dos anúncios. Quando você clica em um link de loja, passa a estar sujeito à política de privacidade dessa loja.</p>
+
+    <h2>6. Por quanto tempo guardamos</h2>
+    <p>Mantemos os registros de cliques apenas pelo tempo necessário para analisar o desempenho das divulgações. Você pode pedir a eliminação dos dados que nos permitam identificá-lo, quando existirem.</p>
+
+    <h2>7. Seus direitos</h2>
+    <p>Pela LGPD, você pode solicitar confirmação de tratamento, acesso, correção, anonimização, eliminação, portabilidade, informação sobre compartilhamento e revogação de consentimento. Para isso, escreva para <span data-fill="contactEmail"></span>.</p>
+
+    <h2>8. Cookies</h2>
+    <p>O próprio site não usa cookies de rastreamento. Se o Pixel do Meta estiver ativo, ele pode gravar cookies no seu navegador. Você pode bloqueá-los nas configurações do navegador.</p>
+
+    <h2>9. Segurança</h2>
+    <p>Adotamos medidas razoáveis para proteger as informações que tratamos, mas nenhum sistema é totalmente imune a falhas.</p>
+
+    <h2>10. Mudanças</h2>
+    <p>Podemos atualizar esta política. A data da última atualização fica no topo da página.</p>
+  </main>
+
+  <script>
+    (function () {
+      var s = window.SITE || {};
+      document.querySelectorAll('[data-fill]').forEach(function (el) {
+        var v = s[el.getAttribute('data-fill')];
+        el.textContent = v ? v : '(a definir)';
+      });
+      if (s.brand) document.title = 'Política de Privacidade | ' + s.brand;
+    })();
+  </script>
+</body>
+</html>

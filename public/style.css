@@ -1,0 +1,283 @@
+:root {
+  --bg: #f7f2ec;
+  --surface: #fffdf9;
+  --ink: #2a2320;
+  --muted: #6e625b;
+  --line: #e6dcd1;
+  --accent: #9c4a3c;
+  --accent-hover: #843b2f;
+  --accent-soft: #f1e1dc;
+  --ok: #3f6a4d;
+  --serif: 'Fraunces', Georgia, serif;
+  --sans: 'DM Sans', system-ui, -apple-system, 'Segoe UI', sans-serif;
+}
+
+* { box-sizing: border-box; }
+
+html { -webkit-text-size-adjust: 100%; }
+
+body {
+  margin: 0;
+  font-family: var(--sans);
+  font-size: 17px;
+  line-height: 1.55;
+  color: var(--ink);
+  background: var(--bg);
+}
+
+.wrap {
+  width: 100%;
+  max-width: 1040px;
+  margin: 0 auto;
+  padding: 0 20px;
+}
+
+/* Topo */
+.topo {
+  padding: 22px 0;
+  border-bottom: 1px solid var(--line);
+}
+.topo .wrap {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 16px;
+}
+.marca {
+  font-family: var(--serif);
+  font-size: 22px;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  color: var(--ink);
+  text-decoration: none;
+}
+.insta {
+  font-size: 14px;
+  color: var(--muted);
+  text-decoration: none;
+}
+.insta:hover { color: var(--accent); }
+
+/* Hero */
+.hero {
+  padding: 44px 0 56px;
+}
+.hero .wrap {
+  display: grid;
+  gap: 40px;
+}
+.selo {
+  display: inline-block;
+  font-size: 13px;
+  font-weight: 500;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin-bottom: 14px;
+}
+h1 {
+  font-family: var(--serif);
+  font-weight: 600;
+  font-size: clamp(32px, 7vw, 52px);
+  line-height: 1.08;
+  letter-spacing: -0.02em;
+  margin: 0 0 18px;
+}
+.sub {
+  font-size: 18px;
+  color: var(--muted);
+  margin: 0 0 26px;
+  max-width: 34em;
+}
+
+.btn {
+  display: inline-block;
+  width: 100%;
+  text-align: center;
+  font-family: var(--sans);
+  font-size: 17px;
+  font-weight: 600;
+  color: #fff;
+  background: var(--accent);
+  border: 0;
+  border-radius: 6px;
+  padding: 16px 28px;
+  text-decoration: none;
+  cursor: pointer;
+  transition: background-color 0.15s ease;
+}
+.btn:hover { background: var(--accent-hover); }
+.btn:focus-visible { outline: 3px solid var(--ink); outline-offset: 3px; }
+
+.nota-btn {
+  margin: 12px 0 0;
+  font-size: 14px;
+  color: var(--muted);
+}
+
+.lista {
+  list-style: none;
+  padding: 0;
+  margin: 30px 0 0;
+  display: grid;
+  gap: 12px;
+}
+.lista li {
+  display: grid;
+  grid-template-columns: 22px 1fr;
+  gap: 10px;
+  align-items: start;
+  font-size: 16px;
+}
+.lista svg { margin-top: 4px; color: var(--ok); }
+
+/* Exemplo de oferta */
+.exemplo-rotulo {
+  font-size: 13px;
+  color: var(--muted);
+  margin: 0 0 10px;
+}
+.oferta {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  overflow: hidden;
+  max-width: 380px;
+}
+.oferta-img {
+  aspect-ratio: 4 / 3;
+  background: #efe7de;
+  display: grid;
+  place-items: center;
+  color: var(--muted);
+  font-size: 14px;
+  position: relative;
+}
+.oferta-nota {
+  position: absolute;
+  left: 10px;
+  right: 10px;
+  bottom: 10px;
+  background: rgba(42, 35, 32, 0.88);
+  color: #fff;
+  border-radius: 6px;
+  padding: 7px 12px;
+  font-size: 14px;
+}
+.oferta-corpo { padding: 16px 16px 18px; font-size: 16px; }
+.oferta-gancho {
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.01em;
+  margin: 0 0 10px;
+  line-height: 1.3;
+}
+.oferta-corpo p { margin: 0 0 8px; }
+.de { color: var(--muted); text-decoration: line-through; }
+.por { font-weight: 700; color: var(--ok); }
+.link-falso { color: var(--accent); word-break: break-all; }
+.tag { color: var(--muted); font-size: 14px; }
+
+/* Como funciona */
+.passos {
+  border-top: 1px solid var(--line);
+  padding: 48px 0;
+  background: var(--surface);
+}
+h2 {
+  font-family: var(--serif);
+  font-weight: 600;
+  font-size: 28px;
+  letter-spacing: -0.01em;
+  margin: 0 0 28px;
+}
+.grid3 { display: grid; gap: 28px; }
+.passo-n {
+  font-family: var(--serif);
+  font-size: 34px;
+  color: var(--accent);
+  line-height: 1;
+  margin-bottom: 8px;
+}
+.passo h3 { font-size: 18px; margin: 0 0 6px; }
+.passo p { margin: 0; color: var(--muted); font-size: 16px; }
+
+/* Contador e FAQ */
+.contador {
+  margin: 10px 0 0;
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--ok);
+}
+.faq { padding: 48px 0 8px; }
+.faq details {
+  border-top: 1px solid var(--line);
+  padding: 16px 0;
+}
+.faq details:last-of-type { border-bottom: 1px solid var(--line); }
+.faq summary {
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 17px;
+  list-style: none;
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+}
+.faq summary::-webkit-details-marker { display: none; }
+.faq summary::after { content: '+'; color: var(--accent); font-size: 22px; line-height: 1; }
+.faq details[open] summary::after { content: '\2212'; }
+.faq details p { margin: 10px 0 0; color: var(--muted); font-size: 16px; max-width: 42em; }
+
+.links-legais a, .rodape a { color: var(--muted); }
+.links-legais a:hover, .rodape a:hover { color: var(--accent); }
+
+/* Páginas legais */
+.legal { max-width: 720px; margin: 0 auto; padding: 40px 20px 72px; }
+.legal h1 { font-size: clamp(28px, 6vw, 40px); margin-bottom: 8px; }
+.legal .atualizado { color: var(--muted); font-size: 14px; margin: 0 0 32px; }
+.legal h2 { font-size: 21px; margin: 32px 0 10px; }
+.legal p, .legal li { font-size: 16.5px; }
+.legal ul { padding-left: 20px; }
+.legal a { color: var(--accent); }
+.voltar { display: inline-block; margin-bottom: 24px; font-size: 14px; color: var(--muted); text-decoration: none; }
+.voltar:hover { color: var(--accent); }
+
+/* Fechamento */
+.fecho { padding: 52px 0 60px; text-align: center; }
+.fecho .btn { max-width: 380px; }
+.fecho h2 { margin-bottom: 20px; }
+
+/* Rodapé */
+.rodape {
+  border-top: 1px solid var(--line);
+  padding: 26px 0 40px;
+  font-size: 13.5px;
+  color: var(--muted);
+}
+.rodape p { margin: 0 0 8px; max-width: 46em; }
+
+/* Página de obrigado */
+.centro {
+  min-height: 100vh;
+  display: grid;
+  place-items: center;
+  padding: 24px;
+  text-align: center;
+}
+.centro main { max-width: 420px; }
+.centro h1 { font-size: 30px; margin-bottom: 12px; }
+.centro p { color: var(--muted); margin: 0 0 20px; }
+.centro a { color: var(--accent); }
+
+@media (min-width: 820px) {
+  .hero { padding: 72px 0 84px; }
+  .hero .wrap { grid-template-columns: 1.15fr 0.85fr; gap: 64px; align-items: center; }
+  .btn { width: auto; min-width: 280px; }
+  .grid3 { grid-template-columns: repeat(3, 1fr); gap: 40px; }
+  .oferta { margin-left: auto; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .btn { transition: none; }
+}

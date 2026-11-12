@@ -1,0 +1,71 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Termos de Uso</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;9..40,600&family=Fraunces:opsz,wght@9..144,600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/style.css">
+  <script src="/config.js"></script>
+</head>
+<body>
+  <main class="legal">
+    <a class="voltar" href="/">Voltar</a>
+    <h1>Termos de Uso</h1>
+    <p class="atualizado">Última atualização: <span data-fill="lastUpdate"></span></p>
+
+    <p>Estes termos explicam como funcionam os grupos de ofertas de <strong data-fill="brand"></strong> ("nós"). Ao entrar em um grupo, você concorda com eles.</p>
+
+    <h2>1. Quem somos</h2>
+    <p>Os grupos são mantidos por <span data-fill="ownerName"></span>, pessoa física, que divulga ofertas de lojas online parceiras. Contato: <span data-fill="contactEmail"></span>.</p>
+
+    <h2>2. O que oferecemos</h2>
+    <p>Um grupo gratuito de WhatsApp em que somente os administradores enviam mensagens, com ofertas de roupas, acessórios e produtos relacionados, escolhidas por nós.</p>
+
+    <h2>3. Não vendemos produtos</h2>
+    <p>Nós não vendemos, não entregamos e não cobramos por nenhum produto. A compra, o pagamento, a entrega, a troca e a garantia são de responsabilidade exclusiva da loja onde você comprar. Dúvidas sobre pedidos devem ser tratadas diretamente com a loja.</p>
+
+    <h2>4. Links de afiliado</h2>
+    <p>Alguns links divulgados são de afiliado. Se você comprar por eles, podemos receber uma comissão da loja, sem nenhum custo adicional para você. Nossas mensagens indicam isso, por exemplo com a marcação #Publi.</p>
+
+    <h2>5. Preços e disponibilidade</h2>
+    <p>Preços, descontos, cupons, frete e estoque podem mudar a qualquer momento, inclusive logo depois que a oferta é enviada. Fazemos o possível para informar valores corretos, mas não garantimos que a oferta estará disponível. Confira sempre o valor final na loja antes de comprar.</p>
+
+    <h2>6. Regras do grupo</h2>
+    <ul>
+      <li>O grupo é silencioso: somente administradores enviam mensagens.</li>
+      <li>Não é permitido divulgar outros produtos, links ou serviços aos membros, nem tentar entrar em contato com eles para esse fim.</li>
+      <li>Podemos remover qualquer participante que descumpra estas regras, a qualquer momento.</li>
+      <li>Você pode sair do grupo quando quiser, direto no WhatsApp.</li>
+    </ul>
+
+    <h2>7. Sem garantia de economia</h2>
+    <p>Selecionamos ofertas que nos parecem boas, mas não garantimos que o preço seja o menor do mercado nem que você economizará em cada compra. A decisão de comprar é sua.</p>
+
+    <h2>8. Responsabilidade</h2>
+    <p>Dentro dos limites da lei, não nos responsabilizamos por produtos, serviços, preços, prazos ou condutas das lojas divulgadas, nem por indisponibilidade do WhatsApp ou de sites de terceiros.</p>
+
+    <h2>9. Privacidade</h2>
+    <p>O tratamento de dados está descrito na nossa <a href="/privacidade">Política de Privacidade</a>.</p>
+
+    <h2>10. Mudanças</h2>
+    <p>Podemos atualizar estes termos. A data de atualização fica no topo desta página. Se você continuar no grupo depois de uma mudança, entendemos que concorda com a versão nova.</p>
+
+    <h2>11. Contato</h2>
+    <p>Dúvidas sobre estes termos: <span data-fill="contactEmail"></span>.</p>
+  </main>
+
+  <script>
+    (function () {
+      var s = window.SITE || {};
+      document.querySelectorAll('[data-fill]').forEach(function (el) {
+        var v = s[el.getAttribute('data-fill')];
+        el.textContent = v ? v : '(a definir)';
+      });
+      if (s.brand) document.title = 'Termos de Uso | ' + s.brand;
+    })();
+  </script>
+</body>
+</html>
