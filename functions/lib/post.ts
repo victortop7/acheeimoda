@@ -117,10 +117,13 @@ export function nomeLimpo(titulo: string): string {
 export function montaTexto(p: ProdutoShopee, tipo: Tipo, semente: number): string {
   const varia = p.priceMin !== p.priceMax;
   const desc = p.priceDiscountRate;
-  // Percentual so aparece quando e plausivel: abaixo de 10% nao chama atencao, acima de 70% costuma ser preco de referencia inflado
-  const mostraDesc = desc >= 10 && desc <= 70;
+  // So mostra o preco "De" quando o desconto e plausivel: abaixo de 10% nao chama atencao,
+  // acima de 70% costuma ser preco de referencia inflado pelo vendedor
+  const mostraDe = desc >= 10 && desc <= 70;
   const preco = varia ? `*a partir de ${reais(p.priceMin)}*` : `*${reais(p.price)}*`;
-  const linhaPreco = `🔥 POR ${preco}${mostraDesc ? ` (${desc}% OFF)` : ''}`;
+  // A Shopee nao envia o preco original: ele e estimado pelo desconto (preco / (1 - desconto))
+  const original = parseFloat(p.price) / (1 - desc / 100);
+  const linhaPreco = mostraDe ? `🔥 DE ~${reais(original)}~ | POR ${preco}` : `🔥 POR ${preco}`;
   return [
     escolheGancho(tipo, semente),
     '',
@@ -131,6 +134,6 @@ export function montaTexto(p: ProdutoShopee, tipo: Tipo, semente: number): strin
     '',
     `🔗 ${p.offerLink}`,
     '',
-    '#Publi · link de afiliado',
+    '#Publi',
   ].join('\n');
 }
