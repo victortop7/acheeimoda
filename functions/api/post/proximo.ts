@@ -1,7 +1,7 @@
 import type { Env } from '../../lib/types';
 import { autorizado, json } from '../../lib/auth';
 import { buscarModaFeminina } from '../../lib/shopee';
-import { montaTexto, passaNoFiltro, tipoDe } from '../../lib/post';
+import { montaTexto, passaNoFiltro, temDescontoReal, tipoDe } from '../../lib/post';
 import { MAX_POSTS_DIA, agoraSP } from '../../lib/horario';
 
 // POST /api/post/proximo
@@ -35,8 +35,13 @@ export const onRequestPost: PagesFunction<Env> = async ({ request, env }) => {
       const novos = produtos.filter((p) => passaNoFiltro(p) && !vistos.has(p.itemId));
       if (novos.length === 0) continue;
 
+      // Prefere produtos com desconto real informado pela Shopee (o post sai com DE/POR);
+      // so cai nos sem desconto se a pagina nao tiver mais nenhum com desconto
+      const comDesconto = novos.filter(temDescontoReal);
+      const candidatos = comDesconto.length > 0 ? comDesconto : novos;
+
       // Varia o tipo: prefere um tipo que nao foi usado nos 3 ultimos posts
-      const escolhido = novos.find((p) => !recentes.includes(tipoDe(p.productName))) ?? novos[0];
+      const escolhido = candidatos.find((p) => !recentes.includes(tipoDe(p.productName))) ?? candidatos[0];
       const tipo = tipoDe(escolhido.productName);
       const texto = montaTexto(escolhido, tipo, escolhido.itemId);
 

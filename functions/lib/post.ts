@@ -21,6 +21,12 @@ export function tipoDe(nome: string): Tipo {
   return 'outro';
 }
 
+// Desconto que a propria Shopee informa: abaixo de 10% nao chama atencao e acima de 80% costuma ser
+// preco de referencia inflado pelo vendedor, entao nesses casos o post sai so com o preco atual
+export function temDescontoReal(p: ProdutoShopee): boolean {
+  return p.priceDiscountRate >= 10 && p.priceDiscountRate <= 80;
+}
+
 export function passaNoFiltro(p: ProdutoShopee): boolean {
   return (
     INCLUIR.test(p.productName) &&
@@ -117,13 +123,15 @@ export function nomeLimpo(titulo: string): string {
 export function montaTexto(p: ProdutoShopee, tipo: Tipo, semente: number): string {
   const varia = p.priceMin !== p.priceMax;
   const desc = p.priceDiscountRate;
-  // So mostra o preco "De" quando o desconto e plausivel: abaixo de 10% nao chama atencao,
-  // acima de 70% costuma ser preco de referencia inflado pelo vendedor
-  const mostraDe = desc >= 10 && desc <= 70;
-  const preco = varia ? `*a partir de ${reais(p.priceMin)}*` : `*${reais(p.price)}*`;
-  // A Shopee nao envia o preco original: ele e estimado pelo desconto (preco / (1 - desconto))
-  const original = parseFloat(p.price) / (1 - desc / 100);
-  const linhaPreco = mostraDe ? `🔥 DE ~${reais(original)}~ | POR ${preco}` : `🔥 POR ${preco}`;
+  // O "De" so aparece quando a propria Shopee informa um desconto real (nunca inventamos um)
+  const mostraDe = temDescontoReal(p);
+  const valor = varia ? p.priceMin : p.price;
+  const rotulo = varia ? 'A PARTIR DE' : 'POR';
+  // A Shopee nao envia o preco original: ele e calculado pelo desconto informado (preco / (1 - desconto))
+  const original = parseFloat(valor) / (1 - desc / 100);
+  const linhaPreco = mostraDe
+    ? `🔥 DE ~${reais(original)}~ | ${rotulo} *${reais(valor)}*`
+    : `🔥 ${rotulo} *${reais(valor)}*`;
   return [
     escolheGancho(tipo, semente),
     '',
