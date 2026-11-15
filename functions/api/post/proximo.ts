@@ -2,6 +2,7 @@ import type { Env } from '../../lib/types';
 import { autorizado, json } from '../../lib/auth';
 import { buscarModaFeminina } from '../../lib/shopee';
 import { montaTexto, passaNoFiltro, tipoDe } from '../../lib/post';
+import { MAX_POSTS_DIA, agoraSP } from '../../lib/horario';
 
 // POST /api/post/proximo
 // Escolhe o proximo produto de moda feminina (que ainda nao foi postado) e devolve o texto pronto.
@@ -9,6 +10,17 @@ import { montaTexto, passaNoFiltro, tipoDe } from '../../lib/post';
 export const onRequestPost: PagesFunction<Env> = async ({ request, env }) => {
   if (!autorizado(request, env)) return json({ error: 'Unauthorized' }, 401);
   try {
+    // Trava de seguranca: nunca mais que MAX_POSTS_DIA por dia (inclui testes manuais)
+    const { dia } = agoraSP();
+    const hoje = await env.DB.prepare(
+      `SELECT COUNT(*) AS total FROM posts WHERE date(criado_em, '-3 hours') = ?`
+    )
+      .bind(dia)
+      .first<{ total: number }>();
+    if ((hoje?.total ?? 0) >= MAX_POSTS_DIA) {
+      return json({ ok: false, motivo: `limite diario de ${MAX_POSTS_DIA} posts atingido` }, 200);
+    }
+
     const vistosRes = await env.DB.prepare(
       `SELECT item_id FROM posts WHERE criado_em >= datetime('now', '-60 days')`
     ).all<{ item_id: number }>();
