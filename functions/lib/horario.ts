@@ -3,9 +3,9 @@
 const FUSO = 'America/Sao_Paulo';
 
 export const JANELA_INICIO = 9 * 60; // 09:00
-export const JANELA_FIM = 20 * 60 + 30; // 20:30
-export const POSTS_POR_DIA = 4;
-export const MAX_POSTS_DIA = 12; // trava de seguranca (inclui os testes manuais)
+export const JANELA_FIM = 21 * 60; // 21:00
+export const MAX_POSTS_DIA = 30; // trava de seguranca (inclui os testes manuais)
+export const INTERVALO_MINIMO = 8; // minutos entre dois posts
 
 export interface AgoraSP {
   dia: string; // AAAA-MM-DD
@@ -37,14 +37,22 @@ export function agoraSP(): AgoraSP {
 export const hhmm = (min: number): string =>
   `${String(Math.floor(min / 60)).padStart(2, '0')}:${String(min % 60).padStart(2, '0')}`;
 
-// Divide a janela em faixas iguais e sorteia um minuto no miolo (20% a 80%) de cada uma.
-// Assim os horarios mudam todo dia, mas nunca ficam colados um no outro.
-export function sorteiaHorarios(inicio: number, fim: number, quantidade: number): number[] {
-  const tamanho = (fim - inicio) / quantidade;
-  const saida: number[] = [];
-  for (let i = 0; i < quantidade; i++) {
-    const comeco = inicio + tamanho * i;
-    saida.push(Math.floor(comeco + tamanho * (0.2 + Math.random() * 0.6)));
+// Sorteia 1 ou 2 horarios dentro de CADA hora da janela, em minutos aleatorios.
+// Os horarios mudam todo dia e nunca ficam colados (minimo de INTERVALO_MINIMO minutos entre dois posts).
+export function sorteiaPorHora(inicio: number, fim: number): number[] {
+  const todos: number[] = [];
+  for (let bloco = Math.floor(inicio / 60) * 60; bloco < fim; bloco += 60) {
+    const a = Math.max(bloco, inicio);
+    const b = Math.min(bloco + 60, fim);
+    const tamanho = b - a;
+    if (tamanho < 15) continue;
+    const quantidade = tamanho >= 45 && Math.random() < 0.5 ? 2 : 1;
+    for (let i = 0; i < quantidade; i++) todos.push(a + Math.floor(Math.random() * tamanho));
   }
-  return saida;
+  todos.sort((x, y) => x - y);
+  // Afasta posts que ficaram muito perto (inclusive entre uma hora e a seguinte)
+  for (let i = 1; i < todos.length; i++) {
+    if (todos[i] - todos[i - 1] < INTERVALO_MINIMO) todos[i] = todos[i - 1] + INTERVALO_MINIMO;
+  }
+  return todos.filter((m) => m < fim);
 }

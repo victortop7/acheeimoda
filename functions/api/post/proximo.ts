@@ -1,8 +1,9 @@
 import type { Env } from '../../lib/types';
 import { autorizado, json } from '../../lib/auth';
-import { buscarModaFeminina } from '../../lib/shopee';
-import { montaTexto, passaNoFiltro, temDescontoReal, tipoDe } from '../../lib/post';
+import type { ProdutoShopee } from '../../lib/shopee';
+import { montaTexto, temDescontoReal, tipoDe } from '../../lib/post';
 import { MAX_POSTS_DIA, agoraSP } from '../../lib/horario';
+import { garantePool } from '../../lib/pool';
 
 // POST /api/post/proximo
 // Escolhe o proximo produto de moda feminina (que ainda nao foi postado) e devolve o texto pronto.
@@ -21,48 +22,63 @@ export const onRequestPost: PagesFunction<Env> = async ({ request, env }) => {
       return json({ ok: false, motivo: `limite diario de ${MAX_POSTS_DIA} posts atingido` }, 200);
     }
 
+    // Abastece o estoque se estiver baixo. Se a Shopee falhar mas ainda houver produtos guardados, segue com eles.
+    let erroAbastecer: Error | null = null;
+    try {
+      await garantePool(env);
+    } catch (err) {
+      erroAbastecer = err instanceof Error ? err : new Error('Erro ao abastecer o estoque');
+    }
+
     const vistosRes = await env.DB.prepare(
-      `SELECT item_id FROM posts WHERE criado_em >= datetime('now', '-60 days')`
+      `SELECT item_id FROM posts WHERE criado_em >= datetime('now', '-30 days')`
     ).all<{ item_id: number }>();
     const vistos = new Set<number>(vistosRes.results.map((r) => r.item_id));
 
     const recentesRes = await env.DB.prepare(`SELECT tipo FROM posts ORDER BY id DESC LIMIT 3`).all<{ tipo: string }>();
     const recentes = recentesRes.results.map((r) => r.tipo);
 
-    // Percorre as paginas da Shopee ate achar candidatos novos (maximo 5 paginas)
-    for (let pagina = 1; pagina <= 5; pagina++) {
-      const produtos = await buscarModaFeminina(env, pagina);
-      const novos = produtos.filter((p) => passaNoFiltro(p) && !vistos.has(p.itemId));
-      if (novos.length === 0) continue;
+    const estoque = await env.DB.prepare(
+      `SELECT json FROM candidatos WHERE usado = 0 ORDER BY criado_em ASC, item_id ASC LIMIT 120`
+    ).all<{ json: string }>();
+    const produtos = estoque.results
+      .map((r) => JSON.parse(r.json) as ProdutoShopee)
+      .filter((p) => !vistos.has(p.itemId));
 
-      // Prefere produtos com desconto real informado pela Shopee (o post sai com DE/POR);
-      // so cai nos sem desconto se a pagina nao tiver mais nenhum com desconto
-      const comDesconto = novos.filter(temDescontoReal);
-      const candidatos = comDesconto.length > 0 ? comDesconto : novos;
-
-      // Varia o tipo: prefere um tipo que nao foi usado nos 3 ultimos posts
-      const escolhido = candidatos.find((p) => !recentes.includes(tipoDe(p.productName))) ?? candidatos[0];
-      const tipo = tipoDe(escolhido.productName);
-      const texto = montaTexto(escolhido, tipo, escolhido.itemId);
-
-      await env.DB.prepare(
-        `INSERT INTO posts (item_id, nome, tipo, preco, status) VALUES (?, ?, ?, ?, 'reservado')`
-      )
-        .bind(escolhido.itemId, escolhido.productName.slice(0, 200), tipo, escolhido.price)
-        .run();
-
-      return json({
-        ok: true,
-        itemId: escolhido.itemId,
-        tipo,
-        pagina,
-        texto,
-        imagem: escolhido.imageUrl,
-        link: escolhido.offerLink,
-      });
+    if (produtos.length === 0) {
+      if (erroAbastecer) throw erroAbastecer; // o n8n repete a chamada
+      return json({ ok: false, motivo: 'estoque sem produto novo no momento' }, 200);
     }
 
-    return json({ ok: false, motivo: 'nenhum produto novo passou no filtro nas 5 primeiras paginas' }, 200);
+    // Prefere produtos com desconto real informado pela Shopee (o post sai com DE/POR);
+    // so cai nos sem desconto se o estoque nao tiver mais nenhum com desconto
+    const comDesconto = produtos.filter(temDescontoReal);
+    const candidatos = comDesconto.length > 0 ? comDesconto : produtos;
+
+    // Varia o tipo: prefere um tipo que nao foi usado nos 3 ultimos posts
+    const escolhido = candidatos.find((p) => !recentes.includes(tipoDe(p.productName))) ?? candidatos[0];
+    const tipo = tipoDe(escolhido.productName);
+    const texto = montaTexto(escolhido, tipo, escolhido.itemId);
+
+    await env.DB.batch([
+      env.DB.prepare(`UPDATE candidatos SET usado = 1 WHERE item_id = ?`).bind(escolhido.itemId),
+      env.DB.prepare(`INSERT INTO posts (item_id, nome, tipo, preco, status) VALUES (?, ?, ?, ?, 'reservado')`).bind(
+        escolhido.itemId,
+        escolhido.productName.slice(0, 200),
+        tipo,
+        escolhido.price
+      ),
+    ]);
+
+    return json({
+      ok: true,
+      itemId: escolhido.itemId,
+      tipo,
+      restantesNoEstoque: produtos.length - 1,
+      texto,
+      imagem: escolhido.imageUrl,
+      link: escolhido.offerLink,
+    });
   } catch (err) {
     return json({ ok: false, error: err instanceof Error ? err.message : 'Erro interno' }, 502);
   }
