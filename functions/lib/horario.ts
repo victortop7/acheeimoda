@@ -4,6 +4,7 @@ const FUSO = 'America/Sao_Paulo';
 
 export const JANELA_INICIO = 9 * 60; // 09:00
 export const JANELA_FIM = 21 * 60; // 21:00
+export const POSTS_POR_DIA = 8; // meta de posts por dia (um dia inteiro, de 09:00 a 21:00)
 export const MAX_POSTS_DIA = 30; // trava de seguranca (inclui os testes manuais)
 export const INTERVALO_MINIMO = 8; // minutos entre dois posts
 
@@ -36,6 +37,31 @@ export function agoraSP(): AgoraSP {
 
 export const hhmm = (min: number): string =>
   `${String(Math.floor(min / 60)).padStart(2, '0')}:${String(min % 60).padStart(2, '0')}`;
+
+// Quantos posts cabem no que sobrou da janela (proporcional a meta diaria; dia inteiro = POSTS_POR_DIA)
+export function quantidadeParaJanela(inicio: number, fim: number): number {
+  const restante = fim - inicio;
+  if (restante < 20) return 0;
+  const total = JANELA_FIM - JANELA_INICIO;
+  return Math.max(1, Math.ceil((POSTS_POR_DIA * restante) / total - 0.001));
+}
+
+// Divide a janela em faixas iguais e sorteia um minuto dentro de cada uma (10% a 90% da faixa).
+// Os horarios mudam todo dia, ficam espalhados e nunca colados (minimo de INTERVALO_MINIMO minutos).
+export function sorteiaHorarios(inicio: number, fim: number, quantidade: number): number[] {
+  if (quantidade <= 0) return [];
+  const tamanho = (fim - inicio) / quantidade;
+  const todos: number[] = [];
+  for (let i = 0; i < quantidade; i++) {
+    const comeco = inicio + tamanho * i;
+    todos.push(Math.floor(comeco + tamanho * (0.1 + Math.random() * 0.8)));
+  }
+  todos.sort((x, y) => x - y);
+  for (let i = 1; i < todos.length; i++) {
+    if (todos[i] - todos[i - 1] < INTERVALO_MINIMO) todos[i] = todos[i - 1] + INTERVALO_MINIMO;
+  }
+  return todos.filter((m) => m < fim);
+}
 
 // Sorteia 1 ou 2 horarios dentro de CADA hora da janela, em minutos aleatorios.
 // Os horarios mudam todo dia e nunca ficam colados (minimo de INTERVALO_MINIMO minutos entre dois posts).

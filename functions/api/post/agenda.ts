@@ -1,10 +1,10 @@
 import type { Env } from '../../lib/types';
 import { autorizado, json } from '../../lib/auth';
-import { JANELA_FIM, JANELA_INICIO, agoraSP, hhmm, sorteiaPorHora } from '../../lib/horario';
+import { JANELA_FIM, JANELA_INICIO, agoraSP, hhmm, quantidadeParaJanela, sorteiaHorarios } from '../../lib/horario';
 
 // POST /api/post/agenda
 // Devolve os horarios de postagem de hoje que ainda nao passaram, com a espera em segundos.
-// Na primeira chamada do dia, sorteia 1 a 2 horarios por hora (entre 09:00 e 21:00, Brasilia),
+// Na primeira chamada do dia, sorteia POSTS_POR_DIA horarios espalhados entre 09:00 e 21:00 (Brasilia),
 // guarda, e as chamadas seguintes devolvem os mesmos.
 // Teste: ?agora=08:55 simula esse horario (so para conferir o sorteio; nao use em producao).
 export const onRequestPost: PagesFunction<Env> = async ({ request, env }) => {
@@ -28,7 +28,7 @@ export const onRequestPost: PagesFunction<Env> = async ({ request, env }) => {
     if (lista.length === 0) {
       // Se a primeira chamada vier no meio do dia, sorteia so no que sobrou da janela
       const inicio = Math.max(JANELA_INICIO, minutos + 10);
-      const horarios = (JANELA_FIM - inicio >= 20 ? sorteiaPorHora(inicio, JANELA_FIM) : []).map(hhmm);
+      const horarios = sorteiaHorarios(inicio, JANELA_FIM, quantidadeParaJanela(inicio, JANELA_FIM)).map(hhmm);
       if (horarios.length > 0) {
         await env.DB.batch(
           horarios.map((h) => env.DB.prepare(`INSERT OR IGNORE INTO agenda (dia, horario) VALUES (?, ?)`).bind(dia, h))
