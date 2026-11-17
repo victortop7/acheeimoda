@@ -92,6 +92,19 @@ h1 span { display: block; }
 }
 .prints-legenda { margin: 0 0 24px; font-size: 13px; color: var(--muted); }
 
+/* No computador a faixa sai da coluna estreita do titulo para caber todos os prints */
+@media (min-width: 820px) {
+  .prints {
+    width: 1040px;
+    max-width: calc(100vw - 40px);
+    margin: 0 0 8px 50%;
+    transform: translateX(-50%);
+    padding: 4px 0 14px;
+    justify-content: center;
+  }
+  .prints img { height: 380px; }
+}
+
 .video-slot iframe,
 .video-slot video { width: 100%; height: 100%; border: 0; display: block; background: #000; }
 .video-vazio { width: 100%; height: 100%; display: grid; place-items: center; padding: 20px; color: var(--muted); font-size: 15px; }
