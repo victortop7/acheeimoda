@@ -177,6 +177,34 @@ export function nomeLimpo(titulo: string): string {
   return s.charAt(0).toUpperCase() + s.slice(1);
 }
 
+// Dados prontos para a vitrine da landing (mesmo criterio de preco dos posts: o "De" so aparece com desconto real)
+export interface ItemVitrine {
+  nome: string;
+  imagem: string;
+  link: string;
+  de: string | null;
+  rotulo: string;
+  valor: string;
+  nota: string;
+  vendas: string;
+}
+
+export function itemVitrine(p: ProdutoShopee): ItemVitrine {
+  const varia = p.priceMin !== p.priceMax;
+  const valor = varia ? p.priceMin : p.price;
+  const original = parseFloat(valor) / (1 - p.priceDiscountRate / 100);
+  return {
+    nome: nomeLimpo(p.productName),
+    imagem: p.imageUrl,
+    link: p.offerLink,
+    de: temDescontoReal(p) ? reais(original) : null,
+    rotulo: varia ? 'A PARTIR DE' : 'POR',
+    valor: reais(valor),
+    nota: parseFloat(p.ratingStar).toFixed(1),
+    vendas: vendasLegivel(p.sales),
+  };
+}
+
 export function montaTexto(p: ProdutoShopee, tipo: Tipo, semente: number): string {
   const varia = p.priceMin !== p.priceMax;
   const desc = p.priceDiscountRate;

@@ -69,7 +69,13 @@
 
         <div class="prova-bloco">
           <h2>Veja como as ofertas chegam</h2>
-          <div class="exemplo-grid">
+
+          <!-- Vitrine: produtos reais de hoje (vem de /api/vitrine). Sem produtos, fica o cartao de exemplo abaixo -->
+          <div class="vitrine" id="vitrine" hidden aria-label="Ofertas de hoje"></div>
+          <p class="vitrine-nota" id="vitrine-nota" hidden>Produtos reais, escolhidos hoje. Preços e estoque podem mudar na loja, confira antes de comprar. #Publi: alguns links são de afiliado.</p>
+          <a class="btn btn-grande vitrine-cta" id="entrar-3" href="/obrigado" hidden>Quero receber essas ofertas no grupo</a>
+
+          <div class="exemplo-grid" id="exemplo-grid">
             <ul class="lista">
               <li>
                 <svg width="20" height="20" viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="M4 10.5l4 4 8-9" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
@@ -85,7 +91,7 @@
               </li>
             </ul>
 
-            <div>
+            <div id="exemplo-estatico">
               <p class="exemplo-rotulo">Exemplo de oferta</p>
               <div class="oferta" aria-label="Exemplo de oferta">
                 <div class="oferta-img">
@@ -214,8 +220,75 @@
       // Repassa utm_* e fbclid para as próximas páginas
       var qs = window.location.search;
       if (qs) {
-        document.querySelectorAll('#entrar, #entrar-2').forEach(function (el) { el.href = '/obrigado' + qs; });
+        document.querySelectorAll('#entrar, #entrar-2, #entrar-3').forEach(function (el) { el.href = '/obrigado' + qs; });
       }
+
+      // Vitrine: produtos reais do dia, com link. Se nao houver ao menos 3, mantem o cartao de exemplo.
+      fetch('/api/vitrine').then(function (r) { return r.json(); }).then(function (d) {
+        var itens = (d && d.itens) || [];
+        if (itens.length < 3) return;
+        var box = document.getElementById('vitrine');
+        itens.forEach(function (it) {
+          var card = document.createElement('article');
+          card.className = 'produto';
+
+          var foto = document.createElement('a');
+          foto.className = 'produto-img';
+          foto.href = it.link;
+          foto.target = '_blank';
+          foto.rel = 'sponsored noopener noreferrer';
+          var img = document.createElement('img');
+          img.src = it.imagem;
+          img.alt = it.nome;
+          img.loading = 'lazy';
+          foto.appendChild(img);
+          card.appendChild(foto);
+
+          var corpo = document.createElement('div');
+          corpo.className = 'produto-corpo';
+
+          var nome = document.createElement('p');
+          nome.className = 'produto-nome';
+          nome.textContent = it.nome;
+          corpo.appendChild(nome);
+
+          var preco = document.createElement('p');
+          preco.className = 'produto-preco';
+          if (it.de) {
+            var de = document.createElement('span');
+            de.className = 'de';
+            de.textContent = 'De ' + it.de;
+            preco.appendChild(de);
+            preco.appendChild(document.createElement('br'));
+          }
+          var por = document.createElement('span');
+          por.className = 'por';
+          por.textContent = (it.rotulo === 'POR' ? 'Por ' : 'A partir de ') + it.valor;
+          preco.appendChild(por);
+          corpo.appendChild(preco);
+
+          var meta = document.createElement('p');
+          meta.className = 'produto-meta';
+          meta.textContent = 'Nota ' + it.nota + ' · ' + it.vendas + ' vendidos';
+          corpo.appendChild(meta);
+
+          var ver = document.createElement('a');
+          ver.className = 'produto-link';
+          ver.href = it.link;
+          ver.target = '_blank';
+          ver.rel = 'sponsored noopener noreferrer';
+          ver.textContent = 'Ver na Shopee';
+          corpo.appendChild(ver);
+
+          card.appendChild(corpo);
+          box.appendChild(card);
+        });
+        box.hidden = false;
+        document.getElementById('vitrine-nota').hidden = false;
+        document.getElementById('entrar-3').hidden = false;
+        document.getElementById('exemplo-estatico').hidden = true;
+        document.getElementById('exemplo-grid').classList.add('sem-card');
+      }).catch(function () {});
 
       // Vídeo: YouTube (watch, shorts, youtu.be), arquivo .mp4 ou espaço reservado
       (function montarVideo() {
