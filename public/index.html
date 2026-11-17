@@ -6,7 +6,7 @@
   <title>Achei Moda | Grupo de ofertas de moda feminina</title>
   <meta name="description" content="Grupo gratuito no WhatsApp com ofertas selecionadas de roupas e acessórios femininos. Só os admins enviam mensagens.">
   <meta property="og:title" content="Achei Moda | Grupo de ofertas de moda feminina">
-  <meta property="og:description" content="Ofertas de roupas e acessórios escolhidas por nota e avaliações. Grupo gratuito, só admins enviam mensagens.">
+  <meta property="og:description" content="Ofertas de roupas e acessórios escolhidas por nota e vendas. Grupo gratuito, só admins enviam mensagens.">
   <meta property="og:type" content="website">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -73,11 +73,11 @@
             <ul class="lista">
               <li>
                 <svg width="20" height="20" viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="M4 10.5l4 4 8-9" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
-                <span>Preço original e preço atual sempre à mostra, para você ver o desconto real</span>
+                <span>Preço atual e, quando há desconto, o preço de antes, para você ver a economia</span>
               </li>
               <li>
                 <svg width="20" height="20" viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="M4 10.5l4 4 8-9" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
-                <span>Só entram produtos com boa nota e muitas avaliações</span>
+                <span>Só entram produtos com boa nota e muitas vendas</span>
               </li>
               <li>
                 <svg width="20" height="20" viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="M4 10.5l4 4 8-9" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
@@ -90,14 +90,14 @@
               <div class="oferta" aria-label="Exemplo de oferta">
                 <div class="oferta-img">
                   Foto do produto
-                  <div class="oferta-nota">4.8 de 5 &middot; 2,1 mil avaliações</div>
+                  <div class="oferta-nota">4.8 &middot; 2,1 mil vendidos</div>
                 </div>
                 <div class="oferta-corpo">
                   <p class="oferta-gancho">O vestido que resolve a ceia de Natal</p>
                   <p>Vestido midi canelado, do P ao GG</p>
                   <p><span class="de">De R$ 89,90</span> &nbsp;|&nbsp; <span class="por">Por R$ 49,90</span></p>
                   <p class="link-falso">link do produto</p>
-                  <p class="tag">#Publi &middot; link de afiliado</p>
+                  <p class="tag">#Publi</p>
                 </div>
               </div>
             </div>
@@ -222,11 +222,25 @@
         var slot = document.getElementById('video-slot');
         var url = (site.videoUrl || '').trim();
         var el;
+        var prints = site.printsGrupo || [];
+        if (!url && prints.length) {
+          // Sem video, mostra prints reais do grupo (faixa que desliza para o lado)
+          slot.className = 'prints';
+          prints.forEach(function (src) {
+            var img = document.createElement('img');
+            img.src = src;
+            img.alt = 'Exemplo de oferta postada no grupo';
+            img.loading = 'lazy';
+            slot.appendChild(img);
+          });
+          var legenda = document.createElement('p');
+          legenda.className = 'prints-legenda';
+          legenda.textContent = 'Posts reais do grupo';
+          slot.insertAdjacentElement('afterend', legenda);
+          return;
+        }
         if (!url) {
-          el = document.createElement('div');
-          el.className = 'video-vazio';
-          el.textContent = 'Vídeo de apresentação em breve';
-          slot.appendChild(el);
+          slot.hidden = true; // sem video e sem prints: nao mostra nada
           return;
         }
         if (/\.mp4(\?.*)?$/i.test(url)) {
