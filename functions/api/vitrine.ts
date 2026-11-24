@@ -1,5 +1,6 @@
 import type { Env } from '../lib/types';
 import type { ProdutoShopee } from '../lib/shopee';
+import { garantePool } from '../lib/pool';
 import { itemVitrine, temDescontoReal, tipoDe } from '../lib/post';
 
 // GET /api/vitrine  (publico)
@@ -11,9 +12,20 @@ export const onRequestGet: PagesFunction<Env> = async ({ env }) => {
     'cache-control': 'public, max-age=300',
   };
   try {
-    const res = await env.DB.prepare(
-      `SELECT json FROM candidatos WHERE criado_em >= datetime('now', '-24 hours') ORDER BY criado_em DESC, item_id ASC LIMIT 80`
-    ).all<{ json: string }>();
+    const consulta = () =>
+      env.DB.prepare(
+        `SELECT json FROM candidatos WHERE criado_em >= datetime('now', '-24 hours') ORDER BY criado_em DESC, item_id ASC LIMIT 80`
+      ).all<{ json: string }>();
+    let res = await consulta();
+    // Estoque vazio (ex.: o do dia anterior expirou): abastece com produtos novos da Shopee, renovando a vitrine
+    if (res.results.length < 6) {
+      try {
+        await garantePool(env);
+      } catch {
+        // Shopee oscila: segue com o que houver
+      }
+      res = await consulta();
+    }
     const produtos = res.results.map((r) => JSON.parse(r.json) as ProdutoShopee);
 
     // Prefere os que tem desconto real (saem com DE/POR); no maximo 2 por tipo de peca para variar
