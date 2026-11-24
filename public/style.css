@@ -138,6 +138,8 @@ h1 span { display: block; }
 }
 
 .aviso { margin: 18px 0 0; font-size: 17px; }
+.hero-centro .aviso { margin-bottom: 30px; }
+.hero-centro h1 { margin-bottom: 22px; }
 .aviso strong { font-weight: 900; }
 
 /* Seções */

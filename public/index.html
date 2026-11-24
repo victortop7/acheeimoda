@@ -48,11 +48,14 @@
           <span>direto no seu WhatsApp!</span>
         </h1>
 
-        <!-- Espaço do vídeo (vertical). Defina videoUrl em config.js -->
-        <div class="video-slot" id="video-slot" aria-label="Vídeo de apresentação"></div>
-
+        <!-- Botao logo abaixo do titulo: aparece na primeira tela, sem precisar rolar -->
         <a class="btn btn-grande" id="entrar" href="/obrigado">Entrar no grupo agora</a>
         <p class="aviso"><strong>Aviso:</strong> <span id="aviso-texto">Grupo gratuito. Só os administradores enviam mensagens e você sai quando quiser.</span></p>
+
+        <!-- Prints do grupo (ou video, se houver videoUrl em config.js) -->
+        <div class="video-slot" id="video-slot" aria-label="Vídeo de apresentação"></div>
+
+        <a class="btn btn-grande" id="entrar-4" href="/obrigado">Entrar no grupo agora</a>
       </div>
     </section>
 
@@ -220,7 +223,7 @@
       // Repassa utm_* e fbclid para as próximas páginas
       var qs = window.location.search;
       if (qs) {
-        document.querySelectorAll('#entrar, #entrar-2, #entrar-3').forEach(function (el) { el.href = '/obrigado' + qs; });
+        document.querySelectorAll('#entrar, #entrar-2, #entrar-3, #entrar-4').forEach(function (el) { el.href = '/obrigado' + qs; });
       }
 
       // Vitrine: produtos reais do dia, com link. Se nao houver ao menos 3, mantem o cartao de exemplo.
