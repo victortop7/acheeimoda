@@ -4,7 +4,8 @@ const FUSO = 'America/Sao_Paulo';
 
 export const JANELA_INICIO = 9 * 60; // 09:00
 export const JANELA_FIM = 21 * 60; // 21:00
-export const POSTS_POR_DIA = 8; // meta de posts por dia (um dia inteiro, de 09:00 a 21:00)
+export const POSTS_POR_HORA = 2; // posts em cada hora da janela
+export const HORAS_COM_EXTRA = 2; // horas sorteadas por dia que recebem 3 posts (total: 26 por dia)
 export const MAX_POSTS_DIA = 30; // trava de seguranca (inclui os testes manuais)
 export const INTERVALO_MINIMO = 8; // minutos entre dois posts
 
@@ -38,47 +39,40 @@ export function agoraSP(): AgoraSP {
 export const hhmm = (min: number): string =>
   `${String(Math.floor(min / 60)).padStart(2, '0')}:${String(min % 60).padStart(2, '0')}`;
 
-// Quantos posts cabem no que sobrou da janela (proporcional a meta diaria; dia inteiro = POSTS_POR_DIA)
-export function quantidadeParaJanela(inicio: number, fim: number): number {
-  const restante = fim - inicio;
-  if (restante < 20) return 0;
-  const total = JANELA_FIM - JANELA_INICIO;
-  return Math.max(1, Math.ceil((POSTS_POR_DIA * restante) / total - 0.001));
-}
-
-// Divide a janela em faixas iguais e sorteia um minuto dentro de cada uma (10% a 90% da faixa).
-// Os horarios mudam todo dia, ficam espalhados e nunca colados (minimo de INTERVALO_MINIMO minutos).
-export function sorteiaHorarios(inicio: number, fim: number, quantidade: number): number[] {
-  if (quantidade <= 0) return [];
-  const tamanho = (fim - inicio) / quantidade;
-  const todos: number[] = [];
-  for (let i = 0; i < quantidade; i++) {
-    const comeco = inicio + tamanho * i;
-    todos.push(Math.floor(comeco + tamanho * (0.1 + Math.random() * 0.8)));
-  }
-  todos.sort((x, y) => x - y);
-  for (let i = 1; i < todos.length; i++) {
-    if (todos[i] - todos[i - 1] < INTERVALO_MINIMO) todos[i] = todos[i - 1] + INTERVALO_MINIMO;
-  }
-  return todos.filter((m) => m < fim);
-}
-
-// Sorteia 1 ou 2 horarios dentro de CADA hora da janela, em minutos aleatorios.
-// Os horarios mudam todo dia e nunca ficam colados (minimo de INTERVALO_MINIMO minutos entre dois posts).
-export function sorteiaPorHora(inicio: number, fim: number): number[] {
-  const todos: number[] = [];
+// Sorteia os horarios do dia: POSTS_POR_HORA em cada hora da janela e, em HORAS_COM_EXTRA horas
+// escolhidas por sorteio, um post a mais. Cada hora e dividida em partes iguais e o minuto e sorteado
+// dentro de cada parte, entao os horarios mudam todo dia e nunca ficam colados.
+export function sorteiaHorarios(inicio: number, fim: number): number[] {
+  const blocos: { a: number; b: number }[] = [];
   for (let bloco = Math.floor(inicio / 60) * 60; bloco < fim; bloco += 60) {
     const a = Math.max(bloco, inicio);
     const b = Math.min(bloco + 60, fim);
-    const tamanho = b - a;
-    if (tamanho < 15) continue;
-    const quantidade = tamanho >= 45 && Math.random() < 0.5 ? 2 : 1;
-    for (let i = 0; i < quantidade; i++) todos.push(a + Math.floor(Math.random() * tamanho));
+    if (b - a >= 15) blocos.push({ a, b });
   }
-  todos.sort((x, y) => x - y);
-  // Afasta posts que ficaram muito perto (inclusive entre uma hora e a seguinte)
+
+  // Sorteia quais horas cheias ganham o post extra
+  const cheias = blocos.map((x, i) => (x.b - x.a === 60 ? i : -1)).filter((i) => i >= 0);
+  const comExtra = new Set<number>();
+  while (comExtra.size < Math.min(HORAS_COM_EXTRA, cheias.length)) {
+    comExtra.add(cheias[Math.floor(Math.random() * cheias.length)]);
+  }
+
+  const todos: number[] = [];
+  blocos.forEach(({ a, b }, i) => {
+    const meta = POSTS_POR_HORA + (comExtra.has(i) ? 1 : 0);
+    // Hora incompleta (o fluxo comecou no meio dela) recebe posts na proporcao do tempo que sobrou
+    const quantidade = Math.max(1, Math.round((meta * (b - a)) / 60));
+    const parte = (b - a) / quantidade;
+    for (let j = 0; j < quantidade; j++) todos.push(Math.floor(a + parte * (j + 0.1 + Math.random() * 0.8)));
+  });
+
+  // Garante o intervalo minimo, inclusive entre uma hora e a seguinte, sem passar do fim da janela
   for (let i = 1; i < todos.length; i++) {
     if (todos[i] - todos[i - 1] < INTERVALO_MINIMO) todos[i] = todos[i - 1] + INTERVALO_MINIMO;
   }
-  return todos.filter((m) => m < fim);
+  for (let i = todos.length - 1; i >= 0; i--) {
+    const teto = i === todos.length - 1 ? fim - 1 : todos[i + 1] - INTERVALO_MINIMO;
+    if (todos[i] > teto) todos[i] = teto;
+  }
+  return todos.filter((m) => m >= inicio);
 }
