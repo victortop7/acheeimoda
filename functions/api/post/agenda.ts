@@ -4,7 +4,7 @@ import { JANELA_FIM, JANELA_INICIO, agoraSP, hhmm, sorteiaHorarios } from '../..
 
 // POST /api/post/agenda
 // Devolve os horarios de postagem de hoje que ainda nao passaram, com a espera em segundos.
-// Na primeira chamada do dia, sorteia 2 horarios por hora (3 em duas horas) entre 09:00 e 21:00 (Brasilia),
+// Na primeira chamada do dia, sorteia os horarios do dia (ver ritmoDoDia) entre 09:00 e 21:00 (Brasilia),
 // guarda, e as chamadas seguintes devolvem os mesmos.
 // Teste: ?agora=08:55 simula esse horario (so para conferir o sorteio; nao use em producao).
 export const onRequestPost: PagesFunction<Env> = async ({ request, env }) => {
@@ -28,7 +28,7 @@ export const onRequestPost: PagesFunction<Env> = async ({ request, env }) => {
     if (lista.length === 0) {
       // Se a primeira chamada vier no meio do dia, sorteia so no que sobrou da janela
       const inicio = Math.max(JANELA_INICIO, minutos + 10);
-      const horarios = sorteiaHorarios(inicio, JANELA_FIM).map(hhmm);
+      const horarios = sorteiaHorarios(inicio, JANELA_FIM, real.dia).map(hhmm);
       if (horarios.length > 0) {
         await env.DB.batch(
           horarios.map((h) => env.DB.prepare(`INSERT OR IGNORE INTO agenda (dia, horario) VALUES (?, ?)`).bind(dia, h))

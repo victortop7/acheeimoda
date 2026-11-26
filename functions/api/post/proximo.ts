@@ -2,7 +2,7 @@ import type { Env } from '../../lib/types';
 import { autorizado, json } from '../../lib/auth';
 import type { ProdutoShopee } from '../../lib/shopee';
 import { montaTexto, temDescontoReal, tipoDe } from '../../lib/post';
-import { MAX_POSTS_DIA, agoraSP } from '../../lib/horario';
+import { agoraSP, ritmoDoDia } from '../../lib/horario';
 import { garantePool } from '../../lib/pool';
 
 // POST /api/post/proximo
@@ -11,15 +11,16 @@ import { garantePool } from '../../lib/pool';
 export const onRequestPost: PagesFunction<Env> = async ({ request, env }) => {
   if (!autorizado(request, env)) return json({ error: 'Unauthorized' }, 401);
   try {
-    // Trava de seguranca: nunca mais que MAX_POSTS_DIA por dia (inclui testes manuais)
+    // Trava de seguranca: nunca passa do teto do dia (inclui testes manuais)
     const { dia } = agoraSP();
+    const { teto } = ritmoDoDia(dia);
     const hoje = await env.DB.prepare(
       `SELECT COUNT(*) AS total FROM posts WHERE date(criado_em, '-3 hours') = ?`
     )
       .bind(dia)
       .first<{ total: number }>();
-    if ((hoje?.total ?? 0) >= MAX_POSTS_DIA) {
-      return json({ ok: false, motivo: `limite diario de ${MAX_POSTS_DIA} posts atingido` }, 200);
+    if ((hoje?.total ?? 0) >= teto) {
+      return json({ ok: false, motivo: `limite diario de ${teto} posts atingido` }, 200);
     }
 
     // Abastece o estoque se estiver baixo. Se a Shopee falhar mas ainda houver produtos guardados, segue com eles.
