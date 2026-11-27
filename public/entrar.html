@@ -10,11 +10,16 @@
     body { margin: 0; min-height: 100vh; display: grid; place-items: center; padding: 24px; box-sizing: border-box; font-family: system-ui, sans-serif; text-align: center; color: #1a1a1a; background: #fff; }
     h1 { font-size: 22px; margin: 0 0 18px; }
     a { display: inline-block; padding: 16px 34px; border-radius: 12px; background: #f06a0b; color: #fff; font-weight: 700; text-decoration: none; }
+    .carregando { width: 54px; height: 54px; margin: 0 auto 22px; border-radius: 50%; border: 5px solid #ffe2cc; border-top-color: #f06a0b; box-sizing: border-box; animation: girar .8s linear infinite; }
+    @keyframes girar { to { transform: rotate(360deg); } }
+    p { margin: 0 0 24px; color: #555; }
   </style>
 </head>
 <body>
   <main>
+    <div class="carregando" role="status" aria-label="Carregando"></div>
     <h1>Abrindo o grupo</h1>
+    <p>Aguarde um instante, você será levada ao WhatsApp.</p>
     <a id="ir" href="/go?utm_medium=direto">Entrar no grupo agora</a>
   </main>
 
@@ -34,21 +39,21 @@
       }
 
       var id = window.SITE && window.SITE.metaPixelId;
-      if (!id) { seguir(); return; }
+      if (id) {
+        !function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.async=!0;t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window,document,'script','https://connect.facebook.net/en_US/fbevents.js');
+        fbq('init', id);
+        fbq('track', 'PageView');
+        fbq('track', 'Lead');
+      }
 
-      !function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.async=!0;t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window,document,'script','https://connect.facebook.net/en_US/fbevents.js');
-      fbq('init', id);
-      fbq('track', 'PageView');
-      fbq('track', 'Lead');
-
-      // Segue assim que o pixel carregar (com uma folga para o envio); em internet lenta, no maximo 2 s
-      var espera = setInterval(function () {
-        if (window.fbq && window.fbq.callMethod) {
-          clearInterval(espera);
-          setTimeout(seguir, 300);
-        }
-      }, 50);
-      setTimeout(seguir, 2000);
+      // Carregamento de 2 s. Se o pixel ainda nao tiver carregado (internet lenta), espera mais, ate 3,5 s no total
+      setTimeout(function () {
+        if (!id || window.fbq.callMethod) { seguir(); return; }
+        var espera = setInterval(function () {
+          if (window.fbq.callMethod) { clearInterval(espera); setTimeout(seguir, 300); }
+        }, 50);
+        setTimeout(seguir, 1500);
+      }, 2000);
     })();
   </script>
 </body>
