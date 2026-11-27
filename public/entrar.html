@@ -32,8 +32,9 @@
       document.getElementById('ir').href = destino;
 
       var saiu = false;
+      var tocou = false;
       function seguir() {
-        if (saiu) return;
+        if (saiu || tocou) return;
         saiu = true;
         window.location.replace(destino);
       }
@@ -43,8 +44,17 @@
         !function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.async=!0;t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window,document,'script','https://connect.facebook.net/en_US/fbevents.js');
         fbq('init', id);
         fbq('track', 'PageView');
-        fbq('track', 'Lead');
+        // Quem so passa pela pagina nao conta como Lead (senao o toque sem querer entraria na conta)
+        fbq('trackCustom', 'PassagemAutomatica');
       }
+
+      // Lead = a pessoa tocou no botao: e o sinal de que ela quis entrar
+      document.getElementById('ir').addEventListener('click', function (evento) {
+        evento.preventDefault();
+        if (id) fbq('track', 'Lead');
+        tocou = true;
+        setTimeout(function () { tocou = false; seguir(); }, id ? 400 : 0);
+      });
 
       // Carregamento de 2 s. Se o pixel ainda nao tiver carregado (internet lenta), espera mais, ate 3,5 s no total
       setTimeout(function () {

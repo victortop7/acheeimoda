@@ -2,7 +2,7 @@
 window.SITE = {
   brand: 'Achei Moda',         // nome da marca
   instagram: 'acheeimoda',     // sem @. Vazio = não mostra
-  metaPixelId: '',             // ID do pixel do Meta. Vazio = não carrega o pixel
+  metaPixelId: '1681524800021495',             // ID do pixel do Meta. Vazio = não carrega o pixel
   ownerName: '',               // nome de quem responde pelo grupo (pessoa física), aparece nos Termos, na Privacidade e no rodapé
   contactEmail: '',            // e-mail público de contato (LGPD e dúvidas)
   videoUrl: '',                // vídeo de apresentação (vertical). Aceita link do YouTube (watch, shorts, youtu.be) ou arquivo .mp4. Vazio = mostra o espaço reservado
